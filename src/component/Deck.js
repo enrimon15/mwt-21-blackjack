@@ -21,7 +21,7 @@ function Deck() {
         _this.cards = cards;
     }
 
-    // arrow function prende il contesto dell'oggetto
+    // mischia il mazzo - arrow function prende il contesto dell'oggetto
     this.shuffle = () => {
         if (this.cards) {
             for (let i = 0; i < this.cards.length; i++) {
@@ -34,6 +34,7 @@ function Deck() {
         }
     };
 
+    // pesca una carta
     this.hintCard = () => {
         const cardHint = this.cards[Math.floor((Math.random() * this.cards.length))];
 

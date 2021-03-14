@@ -26,9 +26,6 @@ function Game() {
     const content = new Content();
     appContainer.appendChild(content.element);
 
-    //optionBar.handleStop = content.destroy;
-    //optionBar.handleStart = content.start;
-
     const gameManager = new GameManager();
 
     optionBar.handleStart = gameManager.start;

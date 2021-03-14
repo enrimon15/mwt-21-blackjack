@@ -5,12 +5,19 @@ import {CARD_VALUE_TO_NUMBER} from "../utility/const";
 import {bindCard} from "../utility/CardUtility";
 import loseImg from "../assets/gif/lose.gif";
 import winImg from "../assets/gif/win.gif";
+import backCard from "../assets/cards/back.jpg";
 
 function GameManager() {
     const _this = this;
 
     let playerResult, dealerResult;
     let deck;
+
+    let counterPlayerCard;
+    let counterDealerCard;
+
+    let intervalDealer;
+    let countDealer;
 
     this.restore = function () {
         // elimino i bottoni e ritorno alla situazione iniziale (carte girate)
@@ -56,9 +63,9 @@ function GameManager() {
             alignItems: 'center',
             justifyContent: 'center'
         });
-        const textCount = document.createElement('p');
-        textCount.setAttribute('id','text-player-count');
-        playerCardCount.appendChild(textCount);
+        counterPlayerCard = document.createElement('p');
+        counterPlayerCard.setAttribute('id','text-player-count');
+        playerCardCount.appendChild(counterPlayerCard);
 
         const deckPlayer = document.querySelector('#deck-player');
         deckPlayer.replaceChild(playerCardCount, playerCardSub);
@@ -80,7 +87,6 @@ function GameManager() {
 
         const buttonHint = createButton('Pesca', '#3399ff', true);
         buttonHint.addEventListener('click', function (e) {
-            playerContent.appendChild(divContainerButton);
             const newCard = deck.hintCard();
             _this.setPlayerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
             const oldCard = document.querySelector('#card-player-1');
@@ -89,7 +95,53 @@ function GameManager() {
 
         const buttonStop = createButton('Fermati', 'red');
         buttonStop.addEventListener('click', function (e) {
-            console.log('fermati');
+            const deckDealer = document.querySelector('#deck-dealer');
+            const oldCard = document.querySelector('#card-dealer-0');
+
+            const dealerCardCount = document.createElement('div');
+            dealerCardCount.setAttribute('id', 'card-dealer-count');
+            setStyle(dealerCardCount, {
+                marginRight: '30px',
+                border: '2px solid',
+                borderRadius: '15px',
+                backgroundColor: 'white',
+                color: 'green',
+                height: '250px',
+                width: '160px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            });
+            counterDealerCard = document.createElement('p');
+            counterDealerCard.setAttribute('id','text-dealer-count');
+            dealerCardCount.appendChild(counterDealerCard);
+
+            deckDealer.replaceChild(dealerCardCount, oldCard);
+
+            let goInterval = true;
+
+            const hitCard = () => {
+                const newCard = deck.hintCard();
+
+                if (_this.getDealerResult() + parseInt(newCard.value) > _this.getPlayerResult() && _this.getDealerResult() + parseInt(newCard.value) < 21) {
+                    goInterval = false;
+                    if (intervalDealer) clearInterval(intervalDealer);
+                    _this.endgame('lose');
+                }
+
+                _this.setDealerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
+                const newCardShow = document.createElement('img');
+                setStyle(newCardShow, {
+                    height: '250px',
+                    marginLeft: '-110px',
+                });
+                newCardShow.src = bindCard(newCard);
+
+                deckDealer.appendChild(newCardShow);
+            };
+
+            hitCard();
+            if (goInterval) intervalDealer = setInterval(hitCard, 3000);
         });
 
         divContainerButton.appendChild(buttonHint);
@@ -104,7 +156,23 @@ function GameManager() {
     };
 
     this.setDealerResult = (newValue) => {
-        dealerResult += newValue;
+        dealerResult = parseInt(dealerResult) + parseInt(newValue);
+
+        console.log(counterDealerCard);
+
+        if (counterDealerCard) {
+            console.log('entrato');
+            counterDealerCard.innerHTML = _this.getDealerResult();
+            counterDealerCard.style.fontSize = '40px';
+        }
+
+        if (parseInt(_this.getDealerResult()) > 21) {
+            clearInterval(intervalDealer);
+            console.log('vinto');
+            counterDealerCard.style.color = 'red';
+            _this.endgame('win');
+        }
+
         return dealerResult;
     };
 
@@ -114,13 +182,11 @@ function GameManager() {
     };
 
     this.setPlayerResult = (newValue) => {
-        console.log(parseInt(newValue), parseInt(playerResult));
         playerResult = parseInt(playerResult) + parseInt(newValue);
 
-        const cardCount = document.querySelector('#card-player-count');
-        if (cardCount) {
-            cardCount.innerHTML = _this.getPlayerResult();
-            cardCount.style.fontSize = '40px';
+        if (counterPlayerCard) {
+            counterPlayerCard.innerHTML = _this.getPlayerResult();
+            counterPlayerCard.style.fontSize = '40px';
         }
 
         if (parseInt(playerResult) === 21) {
@@ -130,6 +196,7 @@ function GameManager() {
 
         if (parseInt(playerResult) > 21) {
             console.log('perso');
+            counterPlayerCard.style.color = 'red';
             _this.endgame('lose');
         }
 
