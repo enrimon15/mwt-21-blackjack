@@ -32,7 +32,16 @@ function Deck() {
                 this.cards[i] = oldValue;
             }
         }
-    }
+    };
+
+    this.hintCard = () => {
+        const cardHint = this.cards[Math.floor((Math.random() * this.cards.length))];
+
+        const index = this.cards.indexOf(cardHint);
+        this.cards.splice(index, 1);
+
+        return cardHint;
+    };
 
 }
 

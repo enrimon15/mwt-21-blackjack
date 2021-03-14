@@ -11,3 +11,11 @@ export function initAbsolute(element, props) {
         element.style[key] = 0;
     });
 }
+
+export function setCenterFlexLayout(element) {
+    setStyle(element, {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    });
+}
