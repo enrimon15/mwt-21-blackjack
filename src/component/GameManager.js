@@ -9,7 +9,7 @@ import winImg from "../assets/gif/win.gif";
 function GameManager() {
     const _this = this;
 
-    let playerResult, dealerResult;
+    let playerResult, dealerResult, counterPlayerHit;
     let deck;
 
     let counterPlayerCard, counterDealerCard;
@@ -18,55 +18,37 @@ function GameManager() {
     
     let buttonStop, buttonHit;
 
-    let reInit; 
-
-    
-
-    this.restore = function () {
-        //ritorno alla situazione iniziale (carte girate)
-        const contentGame = document.querySelector('#content-js');
-        const parentNode = contentGame.parentNode;
-        contentGame.remove();
-        if (reInit) {
-            console.log('reinit');
-            let content = reInit();
-            parentNode.appendChild(content);
-        }
-    };
-
     this.start = function () {
-        // content del gioco
-        const content = document.querySelector('#players-cards-content');
 
         // inizializzo i valori
         playerResult = 0;
         dealerResult = 0;
+        counterPlayerHit = 0;
 
         // creo il deck di carte e lo mischio
         deck = new Deck();
         deck.shuffle();
 
         // creo i bottoni "pesca" e "fermati"
-        content.appendChild(buildContentButtons());
+        buildContentButtons();
 
         // giro le carte dealer
         hitNewCardFromDeck('dealer');
 
         // giro le carte player
+        // 1 - creo la counter card e la sostituisco alla prima carta girata
         const playerCardSub = document.getElementById('card-player-0');
         const playerCardCount = createCounterCard('card-player-count');
         counterPlayerCard = document.createElement('p');
         playerCardCount.appendChild(counterPlayerCard);
         playerCardSub.parentNode.replaceChild(playerCardCount, playerCardSub);
-
+        // 2 - pesco una carta
         hitNewCardFromDeck('player');
     };
 
     // costruzione bottoni "pesca" e "fermati"
     function buildContentButtons() {
-        const divContainerButton = document.createElement('div');
-        divContainerButton.setAttribute('id', 'player-button-content');
-        setCenterFlexLayout(divContainerButton);
+        const divContainerButton = document.querySelector('#player-button-content');
 
         buttonHit = createButton('Pesca', '#3399ff', true);
         buttonHit.addEventListener('click', functionHitButt);
@@ -74,30 +56,29 @@ function GameManager() {
         buttonStop = createButton('Fermati', 'red');
         buttonStop.addEventListener('click', functionStopButt);
 
+        console.log('a')
+
         divContainerButton.appendChild(buttonHit);
         divContainerButton.appendChild(buttonStop);
+
+        console.log('b')
 
         return divContainerButton;
     }
 
     // pesca una nuova carta dal mazzo
-    const hitNewCardFromDeck = function (playerType) {
+    function hitNewCardFromDeck(playerType, dealerHit) {
         const newCard = deck.hitCard(); // pesco una carta
         let currentCard;
         
         if (playerType === 'player') {
             _this.setPlayerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
             currentCard = document.querySelector('#card-player-1');
-        } else if (playerType == 'dealer') {
+        } else if (playerType === 'dealer') {
             _this.setDealerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
-            currentCard = document.getElementById('card-dealer-1');
-        } else if (playerType == 'dealerNew') {
-            _this.setDealerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
-            currentCard = document.createElement('img');
-            setStyle(currentCard, {
-                height: '250px',
-                marginLeft: '-110px',
-            });
+            currentCard = dealerHit === true
+                        ? document.createElement('img')
+                        : document.getElementById('card-dealer-1');
         } else {
             return;
         }
@@ -108,15 +89,30 @@ function GameManager() {
 
     // event on PESCA button
     const functionHitButt = function (e) {
+        ++counterPlayerHit;
+
         hitNewCardFromDeck('player');
-    }
+
+        if (parseInt(playerResult) === 21) { // il player blackjack
+            _this.endgame('win');
+        } else if (parseInt(playerResult) > 21) { // il player ha sforato, perde
+            counterPlayerCard.style.color = 'red';
+            _this.endgame('lose');
+        }
+    };
 
     // event on FERMATI button
     const functionStopButt = function (e) {
+        if (counterPlayerHit < 1) {
+            alert('Devi pescare almeno una carta!');
+            return;
+        }
+
+        // disabilito i bottoni "pesca" e "fermati"
         disableButton();
 
+        // creo la counter card dealer e la sotituisco alla prima carta girata
         const oldCard = document.querySelector('#card-dealer-0');
-
         const dealerCardCount = createCounterCard('card-dealer-count');
         counterDealerCard = document.createElement('p');
         counterDealerCard.setAttribute('id','text-dealer-count');
@@ -125,31 +121,38 @@ function GameManager() {
         const deckDealer = oldCard.parentNode;
         deckDealer.replaceChild(dealerCardCount, oldCard);
 
+        // ----
+
         let goInterval = true;
 
         const hitCardDealer = () => {
            
-            const newCard = hitNewCardFromDeck('dealerNew');
-            setStyle(newCard, {
+            const newCard = hitNewCardFromDeck('dealer', true);
+            setStyle(newCard, { // sovrappongo le carte pescate
                 height: '250px',
                 marginLeft: '-110px',
             });
 
             deckDealer.appendChild(newCard);
 
-            if ((parseInt(dealerResult) > playerResult) && (parseInt(dealerResult) <= 21)) {
-                console.log('hai perso');
+            if (parseInt(dealerResult) > 21) { // se il dealer arriva a più di 21 punti (il player vince)
+                if (intervalDealer) clearInterval(intervalDealer);
+                console.log('hai vinto');
+                counterDealerCard.style.color = 'red';
+                _this.endgame('win');
+            } else if (parseInt(dealerResult) > playerResult) { // se il dealer ha fatto meno di 21 punti e ha fatto + del player
                 goInterval = false;
                 if (intervalDealer) clearInterval(intervalDealer);
                 _this.endgame('lose');
-            }     
+            }
         };
 
         hitCardDealer();
         if (goInterval) intervalDealer = setInterval(hitCardDealer, 3000);
-    }
+    };
 
-    const disableButton = () => {
+    // disabilitare i pulsanti per continuare a giocare
+    function disableButton() {
         const newButtHit = createButton('Pesca', 'gray', true);
         newButtHit.classList.remove('btn-start-hover');
         const newButtStop = createButton('Fermati', 'gray');
@@ -157,13 +160,12 @@ function GameManager() {
 
         buttonHit.parentNode.replaceChild(newButtHit, buttonHit);
         buttonStop.parentNode.replaceChild(newButtStop, buttonStop);
+
+        buttonHit = newButtHit;
+        buttonStop = newButtStop;
     }
 
-    // -- GETTER E SETTER DEALER RESULT
-    this.getDealerResult = () => {
-        return dealerResult;
-    };
-
+    // -- SETTER DEALER RESULT
     this.setDealerResult = (newValue) => {
         dealerResult = parseInt(dealerResult) + parseInt(newValue); // aggiorno il punteggio del dealer
 
@@ -172,65 +174,35 @@ function GameManager() {
             counterDealerCard.innerHTML = dealerResult;
             counterDealerCard.style.fontSize = '40px';
         }
-
-        // se il dealer arriva a più di 21 punti (il player vince)
-        if (parseInt(dealerResult) > 21) {
-            if (intervalDealer) clearInterval(intervalDealer);
-            console.log('hai vinto');
-            counterDealerCard.style.color = 'red';
-            _this.endgame('win');
-        }
     };
 
-    // -- GETTER E SETTER PLAYER RESULT
-    this.getPlayerResult = () => {
-        return playerResult;
-    };
-
+    // -- SETTER PLAYER RESULT
     this.setPlayerResult = (newValue) => {
         playerResult = parseInt(playerResult) + parseInt(newValue);
 
         if (counterPlayerCard) {
-            counterPlayerCard.innerHTML = _this.getPlayerResult();
+            counterPlayerCard.innerHTML = playerResult;
             counterPlayerCard.style.fontSize = '40px';
-        }
-
-        if (parseInt(playerResult) === 21) {
-            console.log('hai vinto');
-            _this.endgame('win');
-        }
-
-        if (parseInt(playerResult) > 21) {
-            console.log('hai perso');
-            counterPlayerCard.style.color = 'red';
-            _this.endgame('lose');
         }
     };
 
     // -- END GAME --
     this.endgame = (loseOrWin) => {
         const el = document.querySelector('#blank-content');
+
+        // creo la gif relativa al risultato
         const lose = document.createElement('img');
         lose.setAttribute('id', 'img-lose');
         lose.src = loseOrWin === 'lose' ? loseImg : winImg;
         lose.style.height = '170px';
         el.appendChild(lose);
 
-        const buttonContent = document.getElementById('player-button-content');
-        buttonContent.remove();
+        buttonHit.remove();
+        buttonStop.remove();
 
         const startButton = document.querySelector('#start-button');
         startButton.childNodes[0].textContent = 'RIGIOCA';
     };
-
-
-    // re-init function
-    Object.defineProperty(this, 'reInit', {
-        set: function(callback) {
-            reInit = callback;
-        },
-    });
-
 }
 
 export default GameManager;

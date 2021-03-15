@@ -32,11 +32,10 @@ function Game() {
 
     // gestore del gioco
     const gameManager = new GameManager();
-    gameManager.reInit = content.init;
 
     // assegno il comportamento al bottone della option bar
     optionBar.handleStart = gameManager.start;
-    optionBar.handleStop = gameManager.restore;
+    optionBar.handleStop = content.restore;
 
     document.body.appendChild(appContainer);
 }
