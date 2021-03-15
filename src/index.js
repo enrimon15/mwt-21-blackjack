@@ -1,4 +1,4 @@
-import Deck from "./component/Deck";
+import favicon from "./assets/bj-ico.ico";
 import Game from "./component/Game";
 
 window.addEventListener('load', function() {
