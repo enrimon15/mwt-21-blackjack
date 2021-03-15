@@ -35,7 +35,7 @@ function Deck() {
     };
 
     // pesca una carta
-    this.hintCard = () => {
+    this.hitCard = () => {
         const cardHint = this.cards[Math.floor((Math.random() * this.cards.length))];
 
         const index = this.cards.indexOf(cardHint);

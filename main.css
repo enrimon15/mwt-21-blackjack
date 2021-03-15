@@ -19,11 +19,11 @@
     background-color: rgba(255,255,255,0.1);
     transition: all 0.3s;
 }
-.btn-start:hover::before {
+.btn-start-hover:hover::before {
     opacity: 0 ;
     transform: scale(0.5,0.5);
 }
-.btn-start::after {
+.btn-start-hover::after {
     content: '';
     position: absolute;
     top: 0;
@@ -36,7 +36,7 @@
     border: 1px solid rgba(255,255,255,0.5);
     transform: scale(1.2,1.2);
 }
-.btn-start:hover::after {
+.btn-start-hover:hover::after {
     opacity: 1;
     transform: scale(1,1);
 }

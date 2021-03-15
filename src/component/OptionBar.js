@@ -3,10 +3,10 @@ import {createButton} from "./Button";
 
 function OptionBar() {
     const _this = this;
+    let handleStart, handleStop; // comportamento del bottone
+
     init();
-
-    let handleStart, handleStop;
-
+    
     function init() {
         const el = document.createElement('div');
 
@@ -60,7 +60,7 @@ function OptionBar() {
                 buttonStart.addEventListener('click', handleClickStop);
             };
 
-            buttonStart.addEventListener('click', handleClickStart);
+            buttonStart.addEventListener('click', handleClickStart); // comportamento di default
 
             //------
 
@@ -71,7 +71,7 @@ function OptionBar() {
         _this.element = el;
     }
 
-    // -- GETTER E SETTER
+    // -- SETTER del comportamento bottone
     Object.defineProperty(this, 'handleStart', {
         set: function(callback) {
             handleStart = callback;

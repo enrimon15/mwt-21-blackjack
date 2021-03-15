@@ -19,7 +19,7 @@ function Content() {
                 backgroundColor: '#66A182'
             });
 
-            // -- Header info --
+            // -- Header info player --
             const contentHeader = new ContentHeader();
             el.appendChild(contentHeader.element);
 
@@ -35,7 +35,7 @@ function Content() {
 
             });
 
-            // creo le carte girate: dealer e player
+            // creo il deck con le carte girate: dealer e player
             const playersDeck = ['dealer', 'player'];
             playersDeck.forEach(pd => {
                 const backDeckCards = createBackDeckCard(pd);
@@ -58,7 +58,11 @@ function Content() {
         }
 
         _this.element = el;
+
+        return el;
     }
+
+    _this.init = init;
 }
 
 export default Content;

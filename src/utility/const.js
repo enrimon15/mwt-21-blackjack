@@ -2,7 +2,7 @@ export const SUITS = ['♣','♦','♥','♠'];
 
 export const VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
-export const CLS_BUTTON = ["btn", "btn-start"];
+export const CLS_BUTTON = ["btn-start", "btn-start-hover"];
 
 export const CARD_SUIT_TO_IMG = {
     '♣': 'clubs',

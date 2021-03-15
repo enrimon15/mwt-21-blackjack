@@ -16,6 +16,7 @@ function ContentHeader() {
 
         });
 
+        // creo le due colonne dei 2 giocatori
         const players = ['Dealer', 'Player'];
         players.map(p => {
             const playerText = document.createElement('div');

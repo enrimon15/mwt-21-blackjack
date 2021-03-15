@@ -13,13 +13,17 @@ export function createButton(text, color, margin) {
         });
     }
 
+    // nel caso in cui metto due bottoni affiancati
     if (margin && margin === true) {
         setStyle(button, {
             marginRight: '10px'
         });
     }
+    
+    // aggiungo le classi css
     button.classList.add(...CLS_BUTTON);
 
+    // teso del bottone
     const spanTextButton = document.createElement('span');
     spanTextButton.innerHTML = text;
     button.appendChild(spanTextButton);
