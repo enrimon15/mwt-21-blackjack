@@ -1,5 +1,5 @@
 import Deck from "./Deck";
-import {setCenterFlexLayout, setStyle} from "../utility/setStyle";
+import {setStyle} from "../utility/setStyle";
 import {createButton} from "./Button";
 import {CARD_VALUE_TO_NUMBER} from "../utility/const";
 import {bindCard, createCounterCard} from "../utility/CardUtility";
