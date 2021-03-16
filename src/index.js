@@ -1,8 +1,9 @@
-import favicon from "./assets/bj-ico.ico";
+import  "../bj-ico.ico";
+import  "../main.css";
 import Game from "./component/Game";
 
 window.addEventListener('load', function() {
 
-    const game = new Game();
+    new Game();
 
 });

@@ -8,18 +8,14 @@ function OptionBar() {
     init();
     
     function init() {
-        const el = document.createElement('div');
+        const bar = document.createElement('div');
 
-        if (el) {
+        if (bar) {
 
-            el.setAttribute('id', 'option-bar');
-            initAbsolute(el, ['top', 'right', 'left']);
-            setStyle(el, {
-                height: '25%',
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gridTemplateRows: '1fr 1fr',
-            });
+            // -- Stile --
+            bar.setAttribute('id', 'option-bar');
+            initAbsolute(bar, ['top', 'right', 'left']);
+            setStyle(bar, STYLE_BAR);
 
             // -- Testo --
             const divContainerText = document.createElement('div');
@@ -27,19 +23,16 @@ function OptionBar() {
 
             const infoText = document.createElement('p');
             infoText.innerHTML = 'PREMI START PER GIOCARE!';
-            setStyle(infoText, {
-                fontSize: 'xx-large'
-            });
+            infoText.style.fontSize = 'xx-large';
             divContainerText.appendChild(infoText);
 
-            el.appendChild(divContainerText);
+            bar.appendChild(divContainerText);
 
             // -- Bottone --
             const divContainerButton = document.createElement('div');
             divContainerButton.setAttribute('id','start-button');
             setCenterFlexLayout(divContainerButton);
             const buttonStart = createButton('START');
-
 
             //  -- Comportamento bottone --
             const handleClickStop = () => {
@@ -65,10 +58,10 @@ function OptionBar() {
             //------
 
             divContainerButton.appendChild(buttonStart);
-            el.appendChild(divContainerButton);
+            bar.appendChild(divContainerButton);
         }
 
-        _this.element = el;
+        _this.element = bar;
     }
 
     // -- SETTER del comportamento bottone
@@ -83,5 +76,12 @@ function OptionBar() {
         },
     });
 }
+
+const STYLE_BAR = {
+    height: '25%',
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gridTemplateRows: '1fr 1fr',
+};
 
 export default OptionBar;

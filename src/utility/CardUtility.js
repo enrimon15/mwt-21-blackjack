@@ -17,25 +17,6 @@ export function importImagesCard() {
 /*********/
 
 
-// deck di due carte girate
-export function createBackDeckCard(cardType) {
-    let deck = [];
-
-    for (let i = 0; i<2; i++) {
-        const initCard = document.createElement('img');
-        initCard.setAttribute('id', `card-${cardType}-${i}`); // assegno a ogni carta un'id
-        const margin = i === 0 ? '30px' : '0px';
-        setStyle(initCard, {
-            height: '250px',
-            marginRight: margin,
-        });
-        initCard.src = backCard;
-
-        deck.push(initCard);
-    }
-
-    return deck;
-}
 
 // match della carta (seme - valore) con l'immagine relativa
 export function bindCard(card) {

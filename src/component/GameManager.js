@@ -1,6 +1,6 @@
 import Deck from "./Deck";
-import {setCenterFlexLayout, setStyle} from "../utility/setStyle";
-import {createButton} from "./Button";
+import {setStyle} from "../utility/setStyle";
+import {createButton, disableButtons} from "./Button";
 import {CARD_VALUE_TO_NUMBER} from "../utility/const";
 import {bindCard, createCounterCard} from "../utility/CardUtility";
 import loseImg from "../assets/gif/lose.gif";
@@ -13,10 +13,11 @@ function GameManager() {
     let deck;
 
     let counterPlayerCard, counterDealerCard;
-
-    let intervalDealer;
     
     let buttonStop, buttonHit;
+
+    let deckDealer, deckPlayer;
+    let buttonContent, resultGame;
 
     this.start = function () {
 
@@ -29,6 +30,8 @@ function GameManager() {
         deck = new Deck();
         deck.shuffle();
 
+        takeContentElements();
+
         // creo i bottoni "pesca" e "fermati"
         buildContentButtons();
 
@@ -37,31 +40,34 @@ function GameManager() {
 
         // giro le carte player
         // 1 - creo la counter card e la sostituisco alla prima carta girata
-        const playerCardSub = document.getElementById('card-player-0');
         const playerCardCount = createCounterCard('card-player-count');
         counterPlayerCard = document.createElement('p');
         playerCardCount.appendChild(counterPlayerCard);
-        playerCardSub.parentNode.replaceChild(playerCardCount, playerCardSub);
+        deckPlayer.replaceChild(playerCardCount, deckPlayer.childNodes[0]);
         // 2 - pesco una carta
         hitNewCardFromDeck('player');
     };
 
+    function takeContentElements() {
+        buttonContent = document.getElementById('player-button-content');
+        resultGame = document.getElementById('blank-content');
+        deckPlayer = document.getElementById('deck-player');
+        deckDealer = document.getElementById('deck-dealer');
+    }
+
     // costruzione bottoni "pesca" e "fermati"
     function buildContentButtons() {
-        const divContainerButton = document.querySelector('#player-button-content');
+        const divContainerButton = buttonContent;
 
-        buttonHit = createButton('Pesca', '#3399ff', true);
+        buttonHit = createButton('Pesca', '#3399ff');
+        buttonHit.style.marginRight = '10px';
         buttonHit.addEventListener('click', functionHitButt);
 
         buttonStop = createButton('Fermati', 'red');
         buttonStop.addEventListener('click', functionStopButt);
 
-        console.log('a')
-
         divContainerButton.appendChild(buttonHit);
         divContainerButton.appendChild(buttonStop);
-
-        console.log('b')
 
         return divContainerButton;
     }
@@ -73,12 +79,14 @@ function GameManager() {
         
         if (playerType === 'player') {
             _this.setPlayerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
-            currentCard = document.querySelector('#card-player-1');
+            currentCard = dealerHit === true
+                        ? document.createElement('img')
+                        : deckPlayer.childNodes[1];
         } else if (playerType === 'dealer') {
             _this.setDealerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
             currentCard = dealerHit === true
                         ? document.createElement('img')
-                        : document.getElementById('card-dealer-1');
+                        : deckDealer.childNodes[1];
         } else {
             return;
         }
@@ -91,9 +99,13 @@ function GameManager() {
     const functionHitButt = function (e) {
         ++counterPlayerHit;
 
-        hitNewCardFromDeck('player');
+        const newCard = hitNewCardFromDeck('player', true);
+        setStyle(newCard, STYLE_OVERLAP_CARD); // sovrappongo le carte pescate
 
-        if (parseInt(playerResult) === 21) { // il player blackjack
+        deckPlayer.appendChild(newCard);
+
+
+        if (parseInt(playerResult) === 21) { // il player fa blackjack
             _this.endgame('win');
         } else if (parseInt(playerResult) > 21) { // il player ha sforato, perde
             counterPlayerCard.style.color = 'red';
@@ -103,23 +115,22 @@ function GameManager() {
 
     // event on FERMATI button
     const functionStopButt = function (e) {
+        let intervalDealer;
         if (counterPlayerHit < 1) {
-            alert('Devi pescare almeno una carta!');
+            alert('Devi girare almeno una carta!');
             return;
         }
 
         // disabilito i bottoni "pesca" e "fermati"
-        disableButton();
+        disableButtons(this.parentNode); // this è il bottone "fermati"
 
         // creo la counter card dealer e la sotituisco alla prima carta girata
-        const oldCard = document.querySelector('#card-dealer-0');
         const dealerCardCount = createCounterCard('card-dealer-count');
         counterDealerCard = document.createElement('p');
         counterDealerCard.setAttribute('id','text-dealer-count');
         dealerCardCount.appendChild(counterDealerCard);
 
-        const deckDealer = oldCard.parentNode;
-        deckDealer.replaceChild(dealerCardCount, oldCard);
+        deckDealer.replaceChild(dealerCardCount, deckDealer.childNodes[0]);
 
         // ----
 
@@ -128,10 +139,7 @@ function GameManager() {
         const hitCardDealer = () => {
            
             const newCard = hitNewCardFromDeck('dealer', true);
-            setStyle(newCard, { // sovrappongo le carte pescate
-                height: '250px',
-                marginLeft: '-110px',
-            });
+            setStyle(newCard, STYLE_OVERLAP_CARD); // sovrappongo le carte pescate
 
             deckDealer.appendChild(newCard);
 
@@ -150,20 +158,6 @@ function GameManager() {
         hitCardDealer();
         if (goInterval) intervalDealer = setInterval(hitCardDealer, 3000);
     };
-
-    // disabilitare i pulsanti per continuare a giocare
-    function disableButton() {
-        const newButtHit = createButton('Pesca', 'gray', true);
-        newButtHit.classList.remove('btn-start-hover');
-        const newButtStop = createButton('Fermati', 'gray');
-        newButtStop.classList.remove('btn-start-hover');
-
-        buttonHit.parentNode.replaceChild(newButtHit, buttonHit);
-        buttonStop.parentNode.replaceChild(newButtStop, buttonStop);
-
-        buttonHit = newButtHit;
-        buttonStop = newButtStop;
-    }
 
     // -- SETTER DEALER RESULT
     this.setDealerResult = (newValue) => {
@@ -188,7 +182,7 @@ function GameManager() {
 
     // -- END GAME --
     this.endgame = (loseOrWin) => {
-        const el = document.querySelector('#blank-content');
+        const el = resultGame;
 
         // creo la gif relativa al risultato
         const lose = document.createElement('img');
@@ -204,5 +198,10 @@ function GameManager() {
         startButton.childNodes[0].textContent = 'RIGIOCA';
     };
 }
+
+const STYLE_OVERLAP_CARD = {
+    height: '250px',
+    marginLeft: '-110px',
+};
 
 export default GameManager;

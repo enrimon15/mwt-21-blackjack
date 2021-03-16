@@ -8,13 +8,7 @@ function ContentHeader() {
         const divPlayers = document.createElement('div');
         divPlayers.setAttribute('id', 'players-content');
         initAbsolute(divPlayers, ['top', 'right', 'left']);
-        setStyle(divPlayers, {
-            height: '20%',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gridTemplateRows: '1fr',
-
-        });
+        setStyle(divPlayers, STYLE_HEADER);
 
         // creo le due colonne dei 2 giocatori
         const players = ['Dealer', 'Player'];
@@ -29,5 +23,13 @@ function ContentHeader() {
         _this.element = divPlayers;
     }
 }
+
+const STYLE_HEADER = {
+    height: '20%',
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gridTemplateRows: '1fr',
+
+};
 
 export default ContentHeader;

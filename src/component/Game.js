@@ -5,20 +5,13 @@ import {importImagesCard} from "../utility/CardUtility";
 import GameManager from "./GameManager";
 
 function Game() {
+    // importo le immagini svg delle carte
+    importImagesCard();
 
     // imposto lo stile del body
-    setStyle(document.body, {
-        position: 'relative',
-        width: '100vw',
-        height: '100vh',
-        margin: 0,
-        fontFamily: 'Montserrat, sans-serif',
-        backgroundColor: '#66A182'
-    });
+    setStyle(document.body, STYLE_BODY);
 
-    importImagesCard(); // importo le immagini svg delle carte
-
-    // main window
+    // finestra principale
     const appContainer = document.createElement('main');
     initAbsolute(appContainer, ['top', 'bottom', 'left', 'right']);
 
@@ -31,7 +24,7 @@ function Game() {
     appContainer.appendChild(content.element);
 
     // gestore del gioco
-    const gameManager = new GameManager();
+    const gameManager = new GameManager(content.deckDealer, content.deckPlayer, content.buttonContent, content.resultGame);
 
     // assegno il comportamento al bottone della option bar
     optionBar.handleStart = gameManager.start;
@@ -39,5 +32,14 @@ function Game() {
 
     document.body.appendChild(appContainer);
 }
+
+const STYLE_BODY = {
+    position: 'relative',
+    width: '100vw',
+    height: '100vh',
+    margin: 0,
+    fontFamily: 'Montserrat, sans-serif',
+    backgroundColor: '#66A182'
+};
 
 export default Game;

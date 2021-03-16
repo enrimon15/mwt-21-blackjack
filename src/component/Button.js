@@ -1,7 +1,7 @@
 import {setStyle} from "../utility/setStyle";
 import {CLS_BUTTON} from "../utility/const";
 
-export function createButton(text, color, margin) {
+export function createButton(text, color) {
     const button = document.createElement('div');
     setStyle(button, {
         padding: '15px 50px'
@@ -10,13 +10,6 @@ export function createButton(text, color, margin) {
     if (color) {
         setStyle(button, {
             backgroundColor: color
-        });
-    }
-
-    // nel caso in cui metto due bottoni affiancati
-    if (margin && margin === true) {
-        setStyle(button, {
-            marginRight: '10px'
         });
     }
     
@@ -29,4 +22,11 @@ export function createButton(text, color, margin) {
     button.appendChild(spanTextButton);
 
     return button;
+}
+
+export function disableButtons(buttonsContext) {
+    buttonsContext.childNodes.forEach(button => {
+        button.style.background = 'gray';
+        button.classList.remove('btn-start-hover');
+    });
 }
