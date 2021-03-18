@@ -5,7 +5,13 @@ let images = {};
 //// import delle immagini con webpack
 function importAll(r) {
     let images = {};
-    r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+    r.keys().map((item, index) => { 
+        const img = images[item.replace('./', '')] = r(item);
+        // let imm = new Image();
+        // imm.src = img.default; 
+        // console.log(imm);
+        return img;
+    });
     return images;
 }
 
