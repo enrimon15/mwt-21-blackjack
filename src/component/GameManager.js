@@ -2,9 +2,10 @@ import Deck from "./Deck";
 import {setStyle} from "../utility/setStyle";
 import {createButton, disableButtons} from "./Button";
 import {CARD_VALUE_TO_NUMBER} from "../utility/const";
-import {bindCard, createCounterCard} from "../utility/CardUtility";
+import {bindCard} from "../utility/CardUtility";
 import loseImg from "../assets/gif/lose.gif";
 import winImg from "../assets/gif/win.gif";
+import {createCounterCard} from "./Card";
 
 function GameManager() {
     const _this = this;

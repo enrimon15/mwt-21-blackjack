@@ -24,7 +24,7 @@ function Game() {
     appContainer.appendChild(content.element);
 
     // gestore del gioco
-    const gameManager = new GameManager(content.deckDealer, content.deckPlayer, content.buttonContent, content.resultGame);
+    const gameManager = new GameManager();
 
     // assegno il comportamento al bottone della option bar
     optionBar.handleStart = gameManager.start;

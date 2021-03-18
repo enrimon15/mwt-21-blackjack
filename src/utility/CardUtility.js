@@ -1,10 +1,8 @@
-import {setStyle} from "./setStyle";
-import backCard from "../assets/cards/back.jpg";
 import {CARD_SUIT_TO_IMG, CARD_VALUE_TO_IMG} from "./const";
 
 let images = {};
 
-/** import delle immagini con webpack */
+//// import delle immagini con webpack
 function importAll(r) {
     let images = {};
     r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
@@ -14,7 +12,7 @@ function importAll(r) {
 export function importImagesCard() {
     images = importAll(require.context('../assets/cards', false, /\.(png|jpe?g|svg)$/));
 }
-/*********/
+///////////////////////////
 
 
 
@@ -26,21 +24,4 @@ export function bindCard(card) {
     return images[`${value}_of_${suit}.svg`].default;
 }
 
-export function createCounterCard(id) {
-    const cardCount = document.createElement('div');
-    cardCount.setAttribute('id', id);
-    setStyle(cardCount, {
-        marginRight: '30px',
-        border: '2px solid',
-        borderRadius: '15px',
-        backgroundColor: 'white',
-        color: 'green',
-        height: '250px',
-        width: '160px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    });
 
-    return cardCount;
-}
