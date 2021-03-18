@@ -7,9 +7,10 @@ function importAll(r) {
     let images = {};
     r.keys().map((item, index) => { 
         const img = images[item.replace('./', '')] = r(item);
-        // let imm = new Image();
-        // imm.src = img.default; 
-        // console.log(imm);
+        // cache img
+        let imm = new Image();
+        imm.src = img.default;
+
         return img;
     });
     return images;
