@@ -23,6 +23,7 @@ Il giocatore che fa 21 con le prime carte assegnategli dal dealer, cioè riceve 
 
 #### ![End Game](<https://github.com/enrimon15/mwt-21-blackjack/blob/main/img_demo/game_over.png>)
 
-<img src="https://github.com/enrimon15/mwt-21-blackjack/blob/main/img_demo/iphone.PNG" width="100">
-
+<p align="center">
+  <img src="https://github.com/enrimon15/mwt-21-blackjack/blob/main/img_demo/iphone.PNG" width="200">
+</p>
 
