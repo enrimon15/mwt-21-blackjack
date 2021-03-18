@@ -1,5 +1,5 @@
 import Deck from "./Deck";
-import {setStyle} from "../utility/setStyle";
+import {initAbsolute, setCenterFlexLayout, setStyle} from "../utility/setStyle";
 import {createButton, disableButtons} from "./Button";
 import {CARD_VALUE_TO_NUMBER} from "../utility/const";
 import loseImg from "../assets/gif/lose.gif";
@@ -54,7 +54,6 @@ function GameManager() {
 
     function getContentElements() {
         buttonContent = document.getElementById('player-button-content');
-        resultGame = document.getElementById('blank-content');
         deckPlayer = document.getElementById('deck-player');
         deckDealer = document.getElementById('deck-dealer');
     }
@@ -182,19 +181,24 @@ function GameManager() {
 
     // -- END GAME --
     this.endgame = (loseOrWin) => {
-        const el = resultGame;
 
-        // creo la gif relativa al risultato
+        const containerResult = document.createElement('div');
+        initAbsolute(containerResult, ['left','bottom','right']);
+        setCenterFlexLayout(containerResult);
+
         const result = document.createElement('img');
         result.setAttribute('id', 'img-result');
         result.src = loseOrWin === 'lose' ? loseImg : winImg;
         result.style.height = '170px';
-        el.appendChild(result);
+        containerResult.appendChild(result);
 
         buttonHit.remove();
         buttonStop.remove();
 
-        const startButton = document.querySelector('#start-button');
+        const contentGame = buttonContent.parentNode;
+        contentGame.appendChild(containerResult);
+
+        const startButton = document.getElementById('start-button');
         startButton.childNodes[0].textContent = 'RIGIOCA';
     };
 }

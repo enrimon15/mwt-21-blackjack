@@ -84,6 +84,6 @@ const styles = {
         gridTemplateRows: '1fr 1fr',
     
     }
-}
+};
 
 export default Content;
