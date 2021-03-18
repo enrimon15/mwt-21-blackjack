@@ -15,7 +15,7 @@ function OptionBar() {
             // -- Stile --
             bar.setAttribute('id', 'option-bar');
             initAbsolute(bar, ['top', 'right', 'left']);
-            setStyle(bar, STYLE_BAR);
+            setStyle(bar, styles.STYLE_BAR);
 
             // -- Testo --
             const divContainerText = document.createElement('div');
@@ -77,11 +77,13 @@ function OptionBar() {
     });
 }
 
-const STYLE_BAR = {
-    height: '25%',
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    gridTemplateRows: '1fr 1fr',
-};
+const styles = {
+    STYLE_BAR: {
+        height: '25%',
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: '1fr 1fr',
+    }
+}
 
 export default OptionBar;

@@ -3,14 +3,10 @@ import {CLS_BUTTON} from "../utility/const";
 
 export function createButton(text, color) {
     const button = document.createElement('div');
-    setStyle(button, {
-        padding: '15px 50px'
-    });
+    button.style.padding = '15px 50px';
 
     if (color) {
-        setStyle(button, {
-            backgroundColor: color
-        });
+        button.style.backgroundColor = color;
     }
     
     // aggiungo le classi css

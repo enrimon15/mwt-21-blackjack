@@ -1,7 +1,6 @@
 import {initAbsolute, setCenterFlexLayout, setStyle} from "../utility/setStyle";
 import ContentHeader from "./ContentHeader";
 import {createBackDeckCard} from "./Card";
-import GameManager from "./GameManager";
 
 
 function Content() {
@@ -18,7 +17,7 @@ function Content() {
             // -- Style
             el.setAttribute('id', 'content-js');
             initAbsolute(el, ['bottom', 'right', 'left']);
-            setStyle(el, STYLE_CONTENT);
+            setStyle(el, styles.STYLE_CONTENT);
 
             // -- Header info player --
             const contentHeader = new ContentHeader();
@@ -28,7 +27,7 @@ function Content() {
             contentDeck = document.createElement('div');
             contentDeck.setAttribute('id', 'players-cards-content');
             initAbsolute(contentDeck, ['bottom', 'right', 'left']);
-            setStyle(contentDeck, STYLE_CONTENT_DECK);
+            setStyle(contentDeck, styles.STYLE_CONTENT_DECK);
             el.appendChild(contentDeck);
 
             initContent();
@@ -73,17 +72,18 @@ function Content() {
     }
 }
 
-const STYLE_CONTENT = {
-    top: '25%',
-    backgroundColor: '#66A182'
-};
-
-const STYLE_CONTENT_DECK = {
-    top: '20%',
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gridTemplateRows: '1fr 1fr',
-
-};
+const styles = {
+    STYLE_CONTENT: {
+        top: '25%',
+        backgroundColor: '#66A182'
+    },
+    STYLE_CONTENT_DECK: {
+        top: '20%',
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gridTemplateRows: '1fr 1fr',
+    
+    }
+}
 
 export default Content;

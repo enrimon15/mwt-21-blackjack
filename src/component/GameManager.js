@@ -2,7 +2,6 @@ import Deck from "./Deck";
 import {setStyle} from "../utility/setStyle";
 import {createButton, disableButtons} from "./Button";
 import {CARD_VALUE_TO_NUMBER} from "../utility/const";
-import {bindCard} from "../utility/CardUtility";
 import loseImg from "../assets/gif/lose.gif";
 import winImg from "../assets/gif/win.gif";
 import {createCounterCard} from "./Card";
@@ -31,25 +30,29 @@ function GameManager() {
         deck = new Deck();
         deck.shuffle();
 
-        takeContentElements();
+        console.log(deck);
+
+        getContentElements();
 
         // creo i bottoni "pesca" e "fermati"
         buildContentButtons();
 
         // giro le carte dealer
-        hitNewCardFromDeck('dealer');
+        const newCardDealer = turnCard('dealer');
+        _this.setDealerResult(CARD_VALUE_TO_NUMBER[newCardDealer.value]);
 
         // giro le carte player
-        // 1 - creo la counter card e la sostituisco alla prima carta girata
+        const newCardPlayer = turnCard('player');
+         // creo la counter card player e la sostituisco alla prima carta coperta
         const playerCardCount = createCounterCard('card-player-count');
         counterPlayerCard = document.createElement('p');
         playerCardCount.appendChild(counterPlayerCard);
         deckPlayer.replaceChild(playerCardCount, deckPlayer.childNodes[0]);
-        // 2 - pesco una carta
-        hitNewCardFromDeck('player');
+
+        _this.setPlayerResult(CARD_VALUE_TO_NUMBER[newCardPlayer.value]);
     };
 
-    function takeContentElements() {
+    function getContentElements() {
         buttonContent = document.getElementById('player-button-content');
         resultGame = document.getElementById('blank-content');
         deckPlayer = document.getElementById('deck-player');
@@ -69,41 +72,36 @@ function GameManager() {
 
         divContainerButton.appendChild(buttonHit);
         divContainerButton.appendChild(buttonStop);
-
-        return divContainerButton;
     }
 
-    // pesca una nuova carta dal mazzo
-    function hitNewCardFromDeck(playerType, dealerHit) {
+    function turnCard(playerType) {
         const newCard = deck.hitCard(); // pesco una carta
         let currentCard;
-        
-        if (playerType === 'player') {
-            _this.setPlayerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
-            currentCard = dealerHit === true
-                        ? document.createElement('img')
-                        : deckPlayer.childNodes[1];
-        } else if (playerType === 'dealer') {
-            _this.setDealerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
-            currentCard = dealerHit === true
-                        ? document.createElement('img')
-                        : deckDealer.childNodes[1];
-        } else {
-            return;
-        }
 
-        currentCard.src = bindCard(newCard);
-        return currentCard;
+        switch (playerType) {
+            case 'player':
+                currentCard = deckPlayer.childNodes[1];
+                break;
+            case 'dealer':
+                currentCard = deckDealer.childNodes[1];
+                break;
+            default:
+                console.log("player type " + expr + " non valido");
+                return;
+          }
+
+          currentCard.src = newCard.view.src;
+          return newCard;
     }
 
     // event on PESCA button
     const functionHitButt = function (e) {
         ++counterPlayerHit;
 
-        const newCard = hitNewCardFromDeck('player', true);
-        setStyle(newCard, STYLE_OVERLAP_CARD); // sovrappongo le carte pescate
-
-        deckPlayer.appendChild(newCard);
+        const newCard = deck.hitCard();
+        setStyle(newCard.view, STYLE_OVERLAP_CARD); // sovrappongo le carte pescate
+        deckPlayer.appendChild(newCard.view);
+        _this.setPlayerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
 
 
         if (parseInt(playerResult) === 21) { // il player fa blackjack
@@ -117,13 +115,14 @@ function GameManager() {
     // event on FERMATI button
     const functionStopButt = function (e) {
         let intervalDealer;
+        
         if (counterPlayerHit < 1) {
             alert('Devi girare almeno una carta!');
             return;
         }
 
         // disabilito i bottoni "pesca" e "fermati"
-        disableButtons(this.parentNode); // this è il bottone "fermati"
+        disableButtons(this.parentNode); // this è il bottone "fermati", parentNode è il divContainer dei bottoni
 
         // creo la counter card dealer e la sotituisco alla prima carta girata
         const dealerCardCount = createCounterCard('card-dealer-count');
@@ -139,10 +138,10 @@ function GameManager() {
 
         const hitCardDealer = () => {
            
-            const newCard = hitNewCardFromDeck('dealer', true);
-            setStyle(newCard, STYLE_OVERLAP_CARD); // sovrappongo le carte pescate
-
-            deckDealer.appendChild(newCard);
+            const newCard = deck.hitCard();
+            setStyle(newCard.view, STYLE_OVERLAP_CARD); // sovrappongo le carte pescate
+            deckDealer.appendChild(newCard.view);
+            _this.setDealerResult(CARD_VALUE_TO_NUMBER[newCard.value]);
 
             if (parseInt(dealerResult) > 21) { // se il dealer arriva a più di 21 punti (il player vince)
                 if (intervalDealer) clearInterval(intervalDealer);
@@ -186,11 +185,11 @@ function GameManager() {
         const el = resultGame;
 
         // creo la gif relativa al risultato
-        const lose = document.createElement('img');
-        lose.setAttribute('id', 'img-lose');
-        lose.src = loseOrWin === 'lose' ? loseImg : winImg;
-        lose.style.height = '170px';
-        el.appendChild(lose);
+        const result = document.createElement('img');
+        result.setAttribute('id', 'img-result');
+        result.src = loseOrWin === 'lose' ? loseImg : winImg;
+        result.style.height = '170px';
+        el.appendChild(result);
 
         buttonHit.remove();
         buttonStop.remove();

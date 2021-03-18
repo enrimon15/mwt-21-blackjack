@@ -1,5 +1,5 @@
 import backCard from "../assets/cards/back.jpg";
-import {CARD_SUIT_TO_IMG, CARD_VALUE_TO_IMG} from "../utility/const";
+import { bindCard } from "../utility/CardImageUtility";
 import {setStyle} from "../utility/setStyle";
 
 export default function Card(suit, value) {
@@ -10,9 +10,18 @@ export default function Card(suit, value) {
     function init() {
         _this.value = value;
         _this.suit = suit;
+
+        _this.view = buildCardView();
+    }
+
+    function buildCardView() {
+        const cardView = document.createElement('img');
+        cardView.src = bindCard(_this);
+        return cardView;
     }
 }
 
+// carta bianca con cantatore punteggio
 export function createCounterCard(id) {
     const cardCount = document.createElement('div');
     cardCount.setAttribute('id', id);
@@ -32,7 +41,7 @@ export function createCounterCard(id) {
     return cardCount;
 }
 
-// deck di due carte girate
+// deck di due carte coperte
 export function createBackDeckCard(cardType, number) {
     let deck = [];
 
@@ -46,6 +55,7 @@ export function createBackDeckCard(cardType, number) {
     return deck;
 }
 
+// carta coperta singola
 function buildBackCard(id) {
     const card = document.createElement('img');
     card.setAttribute('id', id); // assegno a ogni carta un'id
@@ -54,3 +64,4 @@ function buildBackCard(id) {
 
     return card;
 }
+

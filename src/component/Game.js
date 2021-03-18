@@ -1,7 +1,7 @@
 import {initAbsolute, setStyle} from "../utility/setStyle";
 import OptionBar from "./OptionBar";
 import Content from "./Content";
-import {importImagesCard} from "../utility/CardUtility";
+import {importImagesCard} from "../utility/CardImageUtility";
 import GameManager from "./GameManager";
 
 function Game() {
@@ -9,7 +9,7 @@ function Game() {
     importImagesCard();
 
     // imposto lo stile del body
-    setStyle(document.body, STYLE_BODY);
+    setStyle(document.body, styles.STYLE_BODY);
 
     // finestra principale
     const appContainer = document.createElement('main');
@@ -33,13 +33,15 @@ function Game() {
     document.body.appendChild(appContainer);
 }
 
-const STYLE_BODY = {
-    position: 'relative',
-    width: '100vw',
-    height: '100vh',
-    margin: 0,
-    fontFamily: 'Montserrat, sans-serif',
-    backgroundColor: '#66A182'
+const styles = {
+    STYLE_BODY: {
+        position: 'relative',
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
+        fontFamily: 'Montserrat, sans-serif',
+        backgroundColor: '#66A182'
+    }
 };
 
 export default Game;
