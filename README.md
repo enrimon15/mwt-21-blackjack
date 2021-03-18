@@ -1,2 +1,7 @@
-# mwt-21-blackjack
- 21 BlackJack js game
+# 21-blackjack  MWT
+ 21 BlackJack javascript game
+ 
+ ### Scopo del gioco
+Il blackjack (in italiano chiamato anche ventuno) è un gioco di carte che si svolge tra il banco, rappresentato dal casinò, e i giocatori. Vincono i giocatori che realizzano un punteggio più alto del banco e non superiore a 21.
+Il giocatore che fa 21 con le prime carte assegnategli dal dealer, cioè riceve un Asso (11) e un dieci o una figura, forma il cosiddetto "black jack".
+Rif. [Wikipedia](https://it.wikipedia.org/wiki/Blackjack) 
