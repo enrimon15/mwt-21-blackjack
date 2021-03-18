@@ -13,5 +13,17 @@ Il giocatore che fa 21 con le prime carte assegnategli dal dealer, cioè riceve 
 ### Demo
 [Gioca online (Deploy con Firebase)](https://blackjack-js-72866.web.app/)
 
+\
+<br/>
+
 ### Immagini
+#### ![Start Game](<https://github.com/enrimon15/mwt-21-blackjack/blob/main/img_demo/start.png>)
+
+#### ![Gameplay](<https://raw.githubusercontent.com/enrimon15/mwt-21-blackjack/main/img_demo/hit.png?token=AJGHUCW3MJAVSAMR76M7FIDAKNQRC>)
+
+#### ![End Game](<https://github.com/enrimon15/mwt-21-blackjack/blob/main/img_demo/game_over.png>)
+
+<p align="center">
+  <img src="https://github.com/enrimon15/mwt-21-blackjack/blob/main/img_demo/iphone.PNG" width="200">
+</p>
 
