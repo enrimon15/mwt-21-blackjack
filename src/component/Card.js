@@ -25,18 +25,7 @@ export default function Card(suit, value) {
 export function createCounterCard(id) {
     const cardCount = document.createElement('div');
     cardCount.setAttribute('id', id);
-    setStyle(cardCount, {
-        marginRight: '30px',
-        border: '2px solid',
-        borderRadius: '15px',
-        backgroundColor: 'white',
-        color: 'green',
-        height: '250px',
-        width: '160px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    });
+    setStyle(cardCount, styles.STYLE_COUNTER_CARD);
 
     return cardCount;
 }
@@ -47,8 +36,7 @@ export function createBackDeckCard(cardType, number) {
 
     for (let i = 0; i<number; i++) {
         const backCard = buildBackCard(`card-${cardType}-${i}`);
-        const margin = i === 0 ? '30px' : '0px';
-        backCard.style.marginRight = margin;
+        backCard.style.marginRight = i === 0 ? '30px' : '0px';
         deck.push(backCard);
     }
 
@@ -64,4 +52,19 @@ function buildBackCard(id) {
 
     return card;
 }
+
+const styles = {
+    STYLE_COUNTER_CARD: {
+        marginRight: '30px',
+        border: '2px solid',
+        borderRadius: '15px',
+        backgroundColor: 'white',
+        color: 'green',
+        height: '250px',
+        width: '160px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+};
 

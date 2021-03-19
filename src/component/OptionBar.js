@@ -84,6 +84,6 @@ const styles = {
         gridTemplateColumns: '1fr',
         gridTemplateRows: '1fr 1fr',
     }
-}
+};
 
 export default OptionBar;

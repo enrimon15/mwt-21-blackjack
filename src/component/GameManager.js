@@ -17,7 +17,7 @@ function GameManager() {
     let buttonStop, buttonHit;
 
     let deckDealer, deckPlayer;
-    let buttonContent, resultGame;
+    let buttonContent;
 
     this.start = function () {
 
