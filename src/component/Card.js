@@ -1,6 +1,6 @@
 import backCard from "../assets/cards/back.jpg";
 import { bindCard } from "../utility/CardImageUtility";
-import {setStyle} from "../utility/setStyle";
+import {setCenterFlexLayout, setStyle} from "../utility/setStyle";
 
 export default function Card(suit, value) {
     const _this = this;
@@ -32,15 +32,17 @@ export function createCounterCard(id) {
 
 // deck di due carte coperte
 export function createBackDeckCard(cardType, number) {
-    let deck = [];
+    const cardsDiv = document.createElement('div');
+    cardsDiv.setAttribute('id', `deck-${cardType}`);
+    setCenterFlexLayout(cardsDiv);
 
     for (let i = 0; i<number; i++) {
         const backCard = buildBackCard(`card-${cardType}-${i}`);
         backCard.style.marginRight = i === 0 ? '30px' : '0px';
-        deck.push(backCard);
+        cardsDiv.appendChild(backCard);
     }
 
-    return deck;
+    return cardsDiv;
 }
 
 // carta coperta singola

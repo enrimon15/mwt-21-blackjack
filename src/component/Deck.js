@@ -3,12 +3,11 @@ import Card from "./Card";
 
 
 function Deck() {
-    const _this = this;
-
+    const _this = this; // contesto
 
     init();
 
-    // devo passargli il contesto dell'oggetto non essendo arrow function
+    // devo passargli il contesto del deck non essendo arrow function
     function init() {
         let cards = [];
 
@@ -21,11 +20,11 @@ function Deck() {
         _this.cards = cards;
     }
 
-    // mischia il mazzo - arrow function prende il contesto dell'oggetto
+    // mischia il mazzo - arrow function prende il contesto del deck
     this.shuffle = () => {
         if (this.cards) {
             for (let i = 0; i < this.cards.length; i++) {
-                const newIndex = Math.floor(Math.random() * (i + 1)); // ritorna un intero rendom tra 0 e i+1, floor arrotonda
+                const newIndex = Math.floor(Math.random() * (i + 1)); // ritorna un intero random tra 0 e i+1, floor arrotonda
                 // faccio lo swap tra l'indice corrente e l'indice random
                 const oldValue = this.cards[newIndex];
                 this.cards[newIndex] = this.cards[i];

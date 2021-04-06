@@ -1,4 +1,3 @@
-import {setStyle} from "../utility/setStyle";
 import {CLS_BUTTON} from "../utility/const";
 
 export function createButton(text, color) {
@@ -12,7 +11,7 @@ export function createButton(text, color) {
     // aggiungo le classi css
     button.classList.add(...CLS_BUTTON);
 
-    // teso del bottone
+    // testo del bottone
     const spanTextButton = document.createElement('span');
     spanTextButton.innerHTML = text;
     button.appendChild(spanTextButton);
@@ -20,9 +19,13 @@ export function createButton(text, color) {
     return button;
 }
 
-export function disableButtons(buttonsContext) {
+export function disableButtons(buttonsContext, clicks) {
     buttonsContext.childNodes.forEach(button => {
         button.style.background = 'gray';
         button.classList.remove('btn-start-hover');
+        button.style.cursor = 'auto';
+        // rimuovo i click
+        button.removeEventListener('click', clicks[0]);
+        button.removeEventListener('click', clicks[1]);
     });
 }

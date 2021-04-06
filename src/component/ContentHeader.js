@@ -1,7 +1,7 @@
 import {initAbsolute, setCenterFlexLayout, setStyle} from "../utility/setStyle";
 
 function ContentHeader() {
-    const _this = this;
+    const _this = this; //contesto
     init();
 
     function init() {

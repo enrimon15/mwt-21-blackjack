@@ -4,7 +4,7 @@ import {createBackDeckCard} from "./Card";
 
 
 function Content() {
-    const _this = this;
+    const _this = this; // contesto
     let contentDeck;
 
     initStructure();
@@ -41,17 +41,10 @@ function Content() {
         const playersDeck = ['dealer', 'player'];
         playersDeck.forEach(playerType => {
             const backDeckCards = createBackDeckCard(playerType, 2);
-
-            const cardsDiv = document.createElement('div');
-            cardsDiv.setAttribute('id', `deck-${playerType}`);
-            setCenterFlexLayout(cardsDiv);
-            backDeckCards.forEach(card => cardsDiv.appendChild(card));
-
-            contentDeck.appendChild(cardsDiv);
+            contentDeck.appendChild(backDeckCards);
         });
 
         const blank = document.createElement('div');
-        setCenterFlexLayout(blank);
         blank.setAttribute('id','blank-content');
         contentDeck.appendChild(blank);
 
@@ -61,7 +54,7 @@ function Content() {
         contentDeck.appendChild(divContainerButton);
     }
 
-    // reinizializzo il gioco
+    // funzione che re-inizializza il gioco
     _this.restore = () => {
         // elimino tutti i contenuti del content
         while (contentDeck.firstChild) {

@@ -2,7 +2,7 @@ import {initAbsolute, setCenterFlexLayout, setStyle} from "../utility/setStyle";
 import {createButton} from "./Button";
 
 function OptionBar() {
-    const _this = this;
+    const _this = this; // contesto
     let handleStart, handleStop; // comportamento del bottone
 
     init();
@@ -22,6 +22,7 @@ function OptionBar() {
             setCenterFlexLayout(divContainerText);
 
             const infoText = document.createElement('p');
+            infoText.setAttribute('id','option-bar-text');
             infoText.innerHTML = 'PREMI START PER GIOCARE!';
             infoText.style.fontSize = 'xx-large';
             divContainerText.appendChild(infoText);
@@ -36,6 +37,7 @@ function OptionBar() {
 
             //  -- Comportamento bottone --
             const handleClickStop = () => {
+                if (window.intervalDealer) clearInterval(window.intervalDealer);
                 buttonStart.removeEventListener('click', handleClickStop);
                 buttonStart.innerHTML = 'START';
                 if (handleStop) {
