@@ -10,6 +10,7 @@ function GameManager() {
     const _this = this; // contesto
 
     let playerResult, dealerResult, counterPlayerHit;
+
     let deck;
 
     let counterPlayerCard, counterDealerCard;
@@ -97,7 +98,7 @@ function GameManager() {
         }
 
         // disabilito i bottoni "pesca" e "fermati"
-        // this è il bottone "fermati", parentNode è il divContainer dei bottoni - potevo usare anche buttonContent
+        // this è il bottone "fermati", parentNode è il divContainer dei bottoni - potevo usare anche "buttonContent"
         disableButtons(this.parentNode, [functionHitButt, functionStopButt]);
 
         // creo la counter card dealer e la sotituisco alla prima carta girata
